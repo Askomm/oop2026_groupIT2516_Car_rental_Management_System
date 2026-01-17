@@ -11,7 +11,7 @@ public class DemoUsersExample {
     public static void main(String[] args) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             createTableIfNeeded(connection);
-            insertUser(connection, "Alice", "alice@example.com");
+            insertUser(connection, "Mark", "alice@example.com");
             insertUser(connection, "Jacob", "bob@example.com");
             printAllUsers(connection);
         } catch (SQLException e) {
