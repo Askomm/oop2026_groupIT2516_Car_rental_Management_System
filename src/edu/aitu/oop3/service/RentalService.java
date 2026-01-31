@@ -50,3 +50,4 @@ public class RentalService {
         paymentRepo.create(conn, rentalId, total, method);
     }
 }
+//
