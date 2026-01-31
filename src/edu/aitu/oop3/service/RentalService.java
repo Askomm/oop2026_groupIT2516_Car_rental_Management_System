@@ -21,12 +21,12 @@ public class RentalService {
             throws Exception {
 
         Customer c = customerRepo.findById(conn, customerId);
-        if (c.driverAge < 21)
+        if (c.getDriverAge() < 21)
             throw new InvalidDriverAgeException("Driver must be 21+");
 
         Car car = carRepo.findById(conn, carId);
-        if (car == null)
-            throw new CarNotAvailableException("Car not found");
+        if (car == null || !car.isAvailable())
+            throw new CarNotAvailableException("Car not available");
 
         return rentalRepo.create(conn, carId, customerId, start, end);
     }
@@ -36,9 +36,13 @@ public class RentalService {
             throws Exception {
 
         Rental r = rentalRepo.findById(conn, rentalId);
-        Car car = carRepo.findById(conn, r.carId);
+        Car car = carRepo.findById(conn, r.getCarId());
 
-        BigDecimal total = pricing.calculate(car.dailyRate, r.startDate, r.endDate);
+        BigDecimal total = pricing.calculate(
+                car.getDailyRate(),
+                r.getStartDate(),
+                r.getEndDate()
+        );
 
         rentalRepo.close(conn, rentalId,
                 java.sql.Date.valueOf(returnDate), total);
